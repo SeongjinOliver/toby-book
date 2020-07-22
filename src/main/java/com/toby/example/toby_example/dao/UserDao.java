@@ -7,13 +7,18 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-public class UserDao {
+public abstract class UserDao {
+  public abstract Connection getConnection() throws ClassNotFoundException, SQLException;
+//  private Connection getConnection() throws ClassNotFoundException, SQLException {
+//    Class.forName("com.mysql.jdbc.Driver");
+//    Connection c = DriverManager.getConnection(
+//        "jdbc:mysql://localhost:3306/toby_book?serverTimezone=Asia/Seoul&useSSL=false", "root", "manager");
+//    return c;
+//  }
 
   public void add(User user) throws ClassNotFoundException, SQLException {
-    Class.forName("com.mysql.jdbc.Driver");
-    Connection c = DriverManager.getConnection(
-      "jdbc:mysql://localhost:3306/toby_book?serverTimezone=Asia/Seoul&useSSL=false"
-        , "root", "manager");
+
+    Connection c = getConnection();
 
     PreparedStatement ps = c.prepareStatement(
         "insert into users(id, name, password) values(?,?,?)");
@@ -28,10 +33,8 @@ public class UserDao {
   }
 
   public User get(String id) throws ClassNotFoundException, SQLException {
-    Class.forName("com.mysql.jdbc.Driver");
-    Connection c = DriverManager.getConnection(
-        "jdbc:mysql://localhost:3306/toby_book?serverTimezone=Asia/Seoul&useSSL=false"
-        , "root", "manager");
+
+    Connection c = getConnection();
 
     PreparedStatement ps = c.prepareStatement(
         "select * from users where id = ?");
@@ -58,7 +61,7 @@ public class UserDao {
   }
 
   public static void main(String[] args) throws ClassNotFoundException, SQLException {
-    UserDao dao = new UserDao();
+    UserDao dao = new NUserDao();
 
     User user = new User();
     user.setId("whiteship");
