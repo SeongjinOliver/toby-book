@@ -1,4 +1,4 @@
-package com.toby.example.toby_example.dto;
+package com.toby.example.toby_example.domain;
 
 public class User {
   String id;

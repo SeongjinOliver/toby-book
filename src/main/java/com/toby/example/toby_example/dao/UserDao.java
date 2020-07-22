@@ -1,14 +1,20 @@
 package com.toby.example.toby_example.dao;
 
-import com.toby.example.toby_example.dto.User;
+import com.toby.example.toby_example.domain.User;
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-public abstract class UserDao {
-  public abstract Connection getConnection() throws ClassNotFoundException, SQLException;
+//public abstract class UserDao {
+public class UserDao {
+  //public abstract Connection getConnection() throws ClassNotFoundException, SQLException;
+  //private SimpleConnectioMaker simpleConnectioMaker;
+  private ConnectionMaker connectionMaker;
+  public UserDao() {
+    //simpleConnectioMaker  = new SimpleConnectioMaker();
+    connectionMaker = new DConnectionMaker();
+  }
 //  private Connection getConnection() throws ClassNotFoundException, SQLException {
 //    Class.forName("com.mysql.jdbc.Driver");
 //    Connection c = DriverManager.getConnection(
@@ -18,7 +24,9 @@ public abstract class UserDao {
 
   public void add(User user) throws ClassNotFoundException, SQLException {
 
-    Connection c = getConnection();
+    //Connection c = getConnection();
+    //Connection c = simpleConnectioMaker.makeNewConnection();
+    Connection c = connectionMaker.makeConnection();
 
     PreparedStatement ps = c.prepareStatement(
         "insert into users(id, name, password) values(?,?,?)");
@@ -34,7 +42,9 @@ public abstract class UserDao {
 
   public User get(String id) throws ClassNotFoundException, SQLException {
 
-    Connection c = getConnection();
+    //Connection c = getConnection();
+    //Connection c = simpleConnectioMaker.makeNewConnection();
+    Connection c = connectionMaker.makeConnection();
 
     PreparedStatement ps = c.prepareStatement(
         "select * from users where id = ?");
@@ -61,7 +71,7 @@ public abstract class UserDao {
   }
 
   public static void main(String[] args) throws ClassNotFoundException, SQLException {
-    UserDao dao = new NUserDao();
+    UserDao dao = new UserDao();
 
     User user = new User();
     user.setId("whiteship");
