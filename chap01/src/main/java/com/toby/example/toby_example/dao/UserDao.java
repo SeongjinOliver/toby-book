@@ -11,10 +11,14 @@ public class UserDao {
   //public abstract Connection getConnection() throws ClassNotFoundException, SQLException;
   //private SimpleConnectioMaker simpleConnectioMaker;
   private ConnectionMaker connectionMaker;
-  public UserDao(ConnectionMaker connectionMaker) {
-    //simpleConnectioMaker  = new SimpleConnectioMaker();
+//  public UserDao(ConnectionMaker connectionMaker) {
+//    //simpleConnectioMaker  = new SimpleConnectioMaker();
+//    this.connectionMaker = connectionMaker;
+//  }
+  public void setConnectionMaker(ConnectionMaker connectionMaker) {
     this.connectionMaker = connectionMaker;
   }
+
 //  private Connection getConnection() throws ClassNotFoundException, SQLException {
 //    Class.forName("com.mysql.jdbc.Driver");
 //    Connection c = DriverManager.getConnection(

@@ -13,13 +13,18 @@ public class DaoFactory {
 //    ConnectionMaker connectionMaker = new DConnectionMaker();
 //    UserDao userDao = new UserDao(connectionMaker);
 //    return userDao;
-    return new UserDao(connectionMaker());
+
+    //return new UserDao(connectionMaker());
+
+    UserDao userDao = new UserDao();
+    userDao.setConnectionMaker(connectionMaker());  // xml로 변환!
+    return userDao;
   }
 
   @Bean
   public ConnectionMaker connectionMaker() {
     return new DConnectionMaker();
-  }
+  } // xml로 변환!
 
   // 만약 다른 데이터베이스를 연결하고자 한다면 메서드를 추가하고 빈으로 등록
 }

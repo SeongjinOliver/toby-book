@@ -4,6 +4,7 @@ import com.toby.example.toby_example.domain.User;
 import java.sql.SQLException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
+import org.springframework.context.support.GenericXmlApplicationContext;
 
 public class UserDaoTest {
 
@@ -12,12 +13,14 @@ public class UserDaoTest {
     //ConnectionMaker connectionMaker = new DConnectionMaker();
     //UserDao dao = new UserDao(connectionMaker);
     //UserDao dao = new DaoFactory().userDao();
-    ApplicationContext context = new AnnotationConfigApplicationContext(DaoFactory.class);
+
+    //ApplicationContext context = new AnnotationConfigApplicationContext(DaoFactory.class);
+    ApplicationContext context = new GenericXmlApplicationContext("classpath:applicationContext.xml");
     UserDao dao = context.getBean("userDao", UserDao.class);
 
     // DAO 사용 코드
-    CountingConnectionMaker ccm = context.getBean("connectionMaker", CountingConnectionMaker.class);
-    System.out.println("Connection counter : " + ccm.getCounter());
+//    CountingConnectionMaker ccm = context.getBean("connectionMaker", CountingConnectionMaker.class);
+//    System.out.println("Connection counter : " + ccm.getCounter());
 
     User user = new User();
     user.setId("whiteship");
