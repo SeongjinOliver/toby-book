@@ -14,8 +14,8 @@ public class UserDaoTest {
     //UserDao dao = new UserDao(connectionMaker);
     //UserDao dao = new DaoFactory().userDao();
 
-    //ApplicationContext context = new AnnotationConfigApplicationContext(DaoFactory.class);
-    ApplicationContext context = new GenericXmlApplicationContext("classpath:applicationContext.xml");
+    ApplicationContext context = new AnnotationConfigApplicationContext(DaoFactory.class);
+    //ApplicationContext context = new GenericXmlApplicationContext("classpath:applicationContext.xml");
     UserDao dao = context.getBean("userDao", UserDao.class);
 
     // DAO 사용 코드

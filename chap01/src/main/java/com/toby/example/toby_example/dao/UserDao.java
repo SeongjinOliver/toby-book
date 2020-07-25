@@ -5,18 +5,24 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import javax.sql.DataSource;
 
 //public abstract class UserDao {
 public class UserDao {
   //public abstract Connection getConnection() throws ClassNotFoundException, SQLException;
   //private SimpleConnectioMaker simpleConnectioMaker;
-  private ConnectionMaker connectionMaker;
+//  private ConnectionMaker connectionMaker;
+  private DataSource dataSource;
+  
 //  public UserDao(ConnectionMaker connectionMaker) {
 //    //simpleConnectioMaker  = new SimpleConnectioMaker();
 //    this.connectionMaker = connectionMaker;
 //  }
-  public void setConnectionMaker(ConnectionMaker connectionMaker) {
-    this.connectionMaker = connectionMaker;
+//  public void setConnectionMaker(ConnectionMaker connectionMaker) {
+//    this.connectionMaker = connectionMaker;
+//  }
+  public void setDataSource(DataSource dataSource) {
+    this.dataSource = dataSource;
   }
 
 //  private Connection getConnection() throws ClassNotFoundException, SQLException {
@@ -30,7 +36,8 @@ public class UserDao {
 
     //Connection c = getConnection();
     //Connection c = simpleConnectioMaker.makeNewConnection();
-    Connection c = connectionMaker.makeConnection();
+    //Connection c = connectionMaker.makeConnection();
+    Connection c = dataSource.getConnection();
 
     PreparedStatement ps = c.prepareStatement(
         "insert into users(id, name, password) values(?,?,?)");
@@ -48,7 +55,8 @@ public class UserDao {
 
     //Connection c = getConnection();
     //Connection c = simpleConnectioMaker.makeNewConnection();
-    Connection c = connectionMaker.makeConnection();
+//    Connection c = connectionMaker.makeConnection();
+    Connection c = dataSource.getConnection();
 
     PreparedStatement ps = c.prepareStatement(
         "select * from users where id = ?");
