@@ -8,6 +8,7 @@ public class TobyExampleApplication {
 
   public static void main(String[] args) {
     SpringApplication.run(TobyExampleApplication.class, args);
+
   }
 
 }

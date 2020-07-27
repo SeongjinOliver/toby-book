@@ -6,37 +6,18 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import javax.sql.DataSource;
+import org.springframework.dao.EmptyResultDataAccessException;
 
-//public abstract class UserDao {
 public class UserDao {
-  //public abstract Connection getConnection() throws ClassNotFoundException, SQLException;
-  //private SimpleConnectioMaker simpleConnectioMaker;
-//  private ConnectionMaker connectionMaker;
+
   private DataSource dataSource;
-  
-//  public UserDao(ConnectionMaker connectionMaker) {
-//    //simpleConnectioMaker  = new SimpleConnectioMaker();
-//    this.connectionMaker = connectionMaker;
-//  }
-//  public void setConnectionMaker(ConnectionMaker connectionMaker) {
-//    this.connectionMaker = connectionMaker;
-//  }
+
   public void setDataSource(DataSource dataSource) {
     this.dataSource = dataSource;
   }
 
-//  private Connection getConnection() throws ClassNotFoundException, SQLException {
-//    Class.forName("com.mysql.jdbc.Driver");
-//    Connection c = DriverManager.getConnection(
-//        "jdbc:mysql://localhost:3306/toby_book?serverTimezone=Asia/Seoul&useSSL=false", "root", "manager");
-//    return c;
-//  }
-
   public void add(User user) throws ClassNotFoundException, SQLException {
 
-    //Connection c = getConnection();
-    //Connection c = simpleConnectioMaker.makeNewConnection();
-    //Connection c = connectionMaker.makeConnection();
     Connection c = dataSource.getConnection();
 
     PreparedStatement ps = c.prepareStatement(
@@ -51,11 +32,9 @@ public class UserDao {
     c.close();
   }
 
+  // DB 내용들을 가져와서 User에 저장
   public User get(String id) throws ClassNotFoundException, SQLException {
 
-    //Connection c = getConnection();
-    //Connection c = simpleConnectioMaker.makeNewConnection();
-//    Connection c = connectionMaker.makeConnection();
     Connection c = dataSource.getConnection();
 
     PreparedStatement ps = c.prepareStatement(
@@ -68,38 +47,55 @@ public class UserDao {
     // ResultSet의 현재 레코드를 가리키는 포인터인 커서를 이동시킬 뿐이고 커서가 가리키고 있는 현재 레코드로 부터 필드 값을
     // 읽어오려면 필드값의 유형에 따라 getXXX()메소드를 사용해야 함
     // - 초기 ResultSet의 포인터는 첫 첫째 레코드 전의 위치를 가리키고 있기 때문에 ResultSet의
-    // 첫번째 레코드로 포인터를 이동시키기 위해 next()메소드를 사용해야 합니다.
-    rs.next();
-    User user = new User();
-    user.setId(rs.getString("id"));
-    user.setName(rs.getString("name"));
-    user.setName(rs.getString("password"));
+    // 첫번째 레코드로 포인터를 이동시키기 위해 next()메소드를 사용해야 함
+    // rs.next();
+
+    //User user = new User();
+    User user = null;
+    if(rs.next()) {
+      user.setId(rs.getString("id"));
+      user.setName(rs.getString("name"));
+      user.setPassword(rs.getString("password"));
+    }
 
     rs.close();
     ps.close();
     c.close();
 
+    if(user == null) throw new EmptyResultDataAccessException(1);
+
     return user;
   }
 
-//  public static void main(String[] args) throws ClassNotFoundException, SQLException {
-//    UserDao dao = new UserDao();
-//
-//    User user = new User();
-//    user.setId("whiteship");
-//    user.setName("백기선");
-//    user.setPassword("married");
-//
-//    dao.add(user);
-//
-//    System.out.println(user.getId() + " 등록 성공");
-//
-//    User user2 = dao.get(user.getId());
-//    System.out.println(user2.getName());
-//    System.out.println(user2.getPassword());
-//
-//    System.out.println(user2.getId() + " 조회 성공");
-//
-//  }
+  // user 테이블의 모든 레코드를 삭제해주는 간단한 기능
+  public void deleteAll() throws SQLException {
+    Connection c = dataSource.getConnection();
+
+    PreparedStatement ps = c.prepareStatement("delete from users");
+
+    ps.executeUpdate();
+
+    ps.close();
+    c.close();
+  }
+
+  // user 테이블의 레코드 개수를 돌려준다.
+  public int getCount() throws SQLException {
+    Connection c = dataSource.getConnection();
+
+    PreparedStatement ps = c.prepareStatement("select count(*) from users");
+
+    ResultSet rs = ps.executeQuery();
+    rs.next();
+    int count = rs.getInt(1);
+
+    rs.close();
+    ps.close();
+    c.close();
+
+    return count;
+  }
+
+
 
 }
